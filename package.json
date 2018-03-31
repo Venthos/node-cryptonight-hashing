@@ -1,0 +1,21 @@
+{
+    "name": "cryptonight-hashing",
+    "version": "0.0.1",
+    "main": "cryptonighthashing",
+    "author": {
+        "name": "Multiple",
+        "email": "Check The Git Repo"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/venthos/node-cryptonight-hashing.git"
+    },
+    "dependencies": {
+        "bindings": "*",
+        "nan": "^2.0.0"
+    },
+    "keywords": [
+        "cryptonote",
+        "cryptonote-light"
+    ]
+}
