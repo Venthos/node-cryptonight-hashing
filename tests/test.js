@@ -25,7 +25,10 @@ for (let hashType in hashes){
         lr.on('line', function (line) {
             if (hashes[hashType].fileFormat === 'cn'){
                 let line_data = line.split(' ');
-                let hashed_data = hashes[hashType].function(Buffer.from(line_data[2], 'hex'), parseInt(line_data[0])).toString('hex');
+                let cn_variant = parseInt(line_data[0]);
+                let height = (cn_variant >= 4) ? parseInt(line_data[3]) : 0;
+                let hashed_data = hashes[hashType].function(Buffer.from(line_data[2], 'hex'), cn_variant, height).toString('hex');
+
                 if (line_data[1] !== hashed_data){
                     console.log('Expected: ' + line_data[1]);
                     console.log('Received: ' + hashed_data);

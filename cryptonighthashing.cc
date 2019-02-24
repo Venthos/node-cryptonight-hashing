@@ -22,6 +22,7 @@ using namespace Nan;
 NAN_METHOD(cryptonight) {
 
         uint32_t cn_variant = 0;
+        uint64_t height = 0;
 
         if (info.Length() < 2)
         return THROW_ERROR_EXCEPTION("You must provide two arguments.");
@@ -31,6 +32,13 @@ NAN_METHOD(cryptonight) {
                 cn_variant = info[1]->ToUint32()->Uint32Value();
             else
                 return THROW_ERROR_EXCEPTION("Argument 2 should be an int32");
+        }
+
+        if (info.Length() >= 3) {
+            if (info[2]->IsNumber())
+                height = info[2]->ToUint32()->Uint32Value();
+            else
+                return THROW_ERROR_EXCEPTION("Argument 3 should be a number");
         }
 
         Local<Object> target = info[0]->ToObject();
@@ -45,7 +53,11 @@ NAN_METHOD(cryptonight) {
 
         if (cn_variant > 0 && input_len < 43)
             return THROW_ERROR_EXCEPTION("Argument must be 43 bytes for cryptonight variant 1+");
-        cn_slow_hash(input, input_len, output, cn_variant, 0);
+
+	if (cn_variant >= 4 && height == 0)
+            return THROW_ERROR_EXCEPTION("Height must be provided for cryptonightR (variant 4+)");
+
+        cn_slow_hash(input, input_len, output, cn_variant, 0, height);
 
         v8::Local<v8::Value> returnValue = Nan::CopyBuffer(output, 32).ToLocalChecked();
         info.GetReturnValue().Set(
